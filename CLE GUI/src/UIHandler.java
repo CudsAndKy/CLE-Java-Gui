@@ -1,14 +1,18 @@
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.geom.RoundRectangle2D;
+import java.awt.image.BufferedImage;
+import java.awt.image.ConvolveOp;
+import java.awt.image.Kernel;
 import javax.swing.*;
 
 public class UIHandler extends JFrame implements ActionListener, MouseListener {
     Dimension screensize = Toolkit.getDefaultToolkit().getScreenSize();
-    ImageIcon homepageBg = new ImageIcon("HomepageBg.png");
-    ImageIcon sctxt = new ImageIcon("sugarcaneFarmTxt.png");
-    ImageIcon mstxt = new ImageIcon("mgmtSystemTxt.png");
-    ImageIcon loginButton = new ImageIcon("loginButton.png");
-    ImageIcon sysLogo = new ImageIcon("logo1.png");
+    ImageIcon homepageBg = new ImageIcon("CLE GUI\\HomepageBg.png");
+    ImageIcon sctxt = new ImageIcon("CLE GUI\\sugarcaneFarmTxt.png");
+    ImageIcon mstxt = new ImageIcon("CLE GUI\\mgmtSystemTxt.png");
+    ImageIcon loginButton = new ImageIcon("CLE GUI\\loginButton.png");
+    ImageIcon sysLogo = new ImageIcon("CLE GUI\\logo1.png");
     Image image;
     Image logo = Toolkit.getDefaultToolkit().getImage("logo1.png");
     JLabel homepageLabel = new JLabel(homepageBg);
@@ -82,6 +86,11 @@ public class UIHandler extends JFrame implements ActionListener, MouseListener {
         faq.addMouseListener(this);
         this.add(faq);
 
+        //added to homepage
+        glassPanel.setOpaque(false);
+        glassPanel.setBounds(850, 200, 500, 500);
+        this.add(glassPanel);
+        
         
         
         
@@ -216,6 +225,105 @@ public class UIHandler extends JFrame implements ActionListener, MouseListener {
         }
     };
 
+
+    JPanel glassPanel = new JPanel() {
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            Graphics2D g2d = (Graphics2D) g.create();
+            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+    
+            int x = 10;  // Margin for the rounded rectangle
+            int y = 10;
+            int width = getWidth() - 20;
+            int height = getHeight() - 20;
+            int arc = 30; // Rounded corner arc
+    
+            // Create the blurred background
+            BufferedImage blurredBackground = createBlurredBackground(getWidth(), getHeight(), 15);
+    
+            // Mask the blurred background to fit the rounded rectangle
+            BufferedImage maskedBackground = applyMask(blurredBackground, x, y, width, height, arc);
+            g2d.drawImage(maskedBackground, 0, 0, null);
+    
+            // Draw the glass effect overlay
+            Color glassColor = new Color(255, 255, 255, 80); // Semi-transparent white
+            g2d.setColor(glassColor);
+            g2d.fillRoundRect(x, y, width, height, arc, arc);
+    
+            // Draw the border
+            Color borderColor = new Color(255, 255, 255, 150);
+            g2d.setColor(borderColor);
+            g2d.setStroke(new BasicStroke(2));
+            g2d.drawRoundRect(x, y, width, height, arc, arc);
+    
+            g2d.dispose();
+        }
+    };
+
+    private BufferedImage applyMask(BufferedImage source, int x, int y, int width, int height, int arc) {
+        BufferedImage masked = new BufferedImage(source.getWidth(), source.getHeight(), BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2d = masked.createGraphics();
+    
+        // Enable anti-aliasing for smooth edges
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+    
+        // Fill the entire image with transparency
+        g2d.setComposite(AlphaComposite.Clear);
+        g2d.fillRect(0, 0, masked.getWidth(), masked.getHeight());
+    
+        // Set to normal composite for drawing the rounded rectangle mask
+        g2d.setComposite(AlphaComposite.Src);
+        g2d.setColor(Color.WHITE);
+        g2d.fill(new RoundRectangle2D.Float(x, y, width, height, arc, arc));
+    
+        // Apply the mask to the source image
+        g2d.setComposite(AlphaComposite.SrcIn);
+        g2d.drawImage(source, 0, 0, null);
+    
+        g2d.dispose();
+        return masked;
+    }
+    
+
+    private BufferedImage createBlurredBackground(int width, int height, int blurRadius) {
+        BufferedImage tempImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+    
+        Graphics2D g2d = tempImage.createGraphics();
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+    
+     
+        GradientPaint gradient = new GradientPaint(0, 0, new Color(0, 0, 0, 100), width, height, new Color(0, 0, 0, 50));
+        g2d.setPaint(gradient);
+        g2d.fillRect(0, 0, width, height);
+        g2d.dispose();
+    
+        return applyGaussianBlur(tempImage, blurRadius);
+    }
+    
+
+    private BufferedImage applyGaussianBlur(BufferedImage img, int radius) {
+        int width = img.getWidth();
+        int height = img.getHeight();
+
+        BufferedImage blurred = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2d = blurred.createGraphics();
+        g2d.setComposite(AlphaComposite.Src);
+
+        float[] matrix = new float[radius * radius];
+        for (int i = 0; i < radius * radius; i++) {
+            matrix[i] = 1.0f / (radius * radius);
+        }
+
+        //use convolveop to apply the blur
+        ConvolveOp blurOp = new ConvolveOp(new Kernel(radius, radius, matrix), ConvolveOp.EDGE_NO_OP, null);
+        blurOp.filter(img, blurred);
+        g2d.dispose();
+        return blurred;
+    }
+
+
+
     @Override
     public void actionPerformed(ActionEvent e) {
     
@@ -223,7 +331,7 @@ public class UIHandler extends JFrame implements ActionListener, MouseListener {
 
     @Override
     public void mouseClicked(MouseEvent e) {
-
+        if(e.getSource()==loginButtonLabel) {}
     }
 
     @Override
