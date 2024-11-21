@@ -322,6 +322,10 @@ public class UIHandler extends JFrame implements ActionListener, MouseListener {
         return blurred;
     }
 
+    public void wao() {
+        return ;
+    }
+
 
 
     @Override
@@ -363,3 +367,6 @@ public class UIHandler extends JFrame implements ActionListener, MouseListener {
     }
 
 }
+
+
+//haha damo pa buwas
