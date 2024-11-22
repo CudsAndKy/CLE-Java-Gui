@@ -11,7 +11,7 @@ public class UIHandler extends JFrame implements ActionListener, MouseListener {
     ImageIcon homepageBg = new ImageIcon("CLE GUI\\HomepageBg.png");
     ImageIcon sctxt = new ImageIcon("CLE GUI\\sugarcaneFarmTxt.png");
     ImageIcon mstxt = new ImageIcon("CLE GUI\\mgmtSystemTxt.png");
-    ImageIcon loginButton = new ImageIcon("CLE GUI\\loginButton.png");
+    ImageIcon loginButton = new ImageIcon("CalcButton.png");
     ImageIcon sysLogo = new ImageIcon("CLE GUI\\logo1.png");
     Image image;
     Image logo = Toolkit.getDefaultToolkit().getImage("logo1.png");
@@ -50,8 +50,8 @@ public class UIHandler extends JFrame implements ActionListener, MouseListener {
 
         resizeLoginButton();
         loginButtonLabel.setText("LOG IN");
-        loginButtonLabel.setFont(new Font("Calibri", Font.BOLD, 15));
-        loginButtonLabel.setForeground(Color.white);
+        loginButtonLabel.setFont(new Font("Calibri", Font.PLAIN, 15));
+        loginButtonLabel.setForeground(Color.black);
         loginButtonLabel.setHorizontalTextPosition(JLabel.CENTER);
         loginButtonLabel.addMouseListener(this);
         this.add(loginButtonLabel);
@@ -88,6 +88,14 @@ public class UIHandler extends JFrame implements ActionListener, MouseListener {
         faq.setForeground(Color.white);
         faq.addMouseListener(this);
         this.add(faq);
+
+        lglabel.setText("Please Login To your Account.");
+        lglabel.setFont(new Font("Calibri", Font.PLAIN, 15));
+        lglabel.setBounds(1000, 280, 350, 50);
+        lglabel.setForeground(Color.white);
+        lglabel.setHorizontalTextPosition(JLabel.CENTER);
+        this.addMouseListener(this);
+        this.add(lglabel);
 
         //username and password
         username.setBounds(1000, 400, 200, 30);
@@ -216,7 +224,7 @@ public class UIHandler extends JFrame implements ActionListener, MouseListener {
         image = image.getScaledInstance(width, height, Image.SCALE_SMOOTH);
         ImageIcon resizedIcon = new ImageIcon(image);
         loginButtonLabel.setIcon(resizedIcon);
-        loginButtonLabel.setBounds(280, 550, width, height);
+        loginButtonLabel.setBounds(1030, 590, width, height);
     }
 
     public void hoverlogin() {
@@ -226,7 +234,7 @@ public class UIHandler extends JFrame implements ActionListener, MouseListener {
         image = image.getScaledInstance(width, height, image.SCALE_SMOOTH);
         ImageIcon resizedIcon = new ImageIcon(image);
         loginButtonLabel.setIcon(resizedIcon);
-        loginButtonLabel.setBounds(275, 560, width, height);
+        loginButtonLabel.setBounds(1025, 590, width, height);
 
     }
 
