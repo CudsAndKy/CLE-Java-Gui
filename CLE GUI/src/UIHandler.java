@@ -24,6 +24,9 @@ public class UIHandler extends JFrame implements ActionListener, MouseListener {
     JLabel Contributors = new JLabel();
     JLabel faq = new JLabel();
     JLabel sysLogoLabel = new JLabel();
+    JLabel lglabel = new JLabel();
+    JTextField username = new JTextField();
+    JPasswordField password = new JPasswordField();
 
 
     UIHandler() {
@@ -85,6 +88,64 @@ public class UIHandler extends JFrame implements ActionListener, MouseListener {
         faq.setForeground(Color.white);
         faq.addMouseListener(this);
         this.add(faq);
+
+        //username and password
+        username.setBounds(1000, 400, 200, 30);
+        username.setOpaque(false);
+        username.setBackground(new Color(0, 0, 0, 150));
+        username.setText("Enter Username");
+        username.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, Color.white));
+        username.setForeground(Color.white);
+        this.add(username);
+        // Username Field
+        username.addFocusListener(new FocusListener() {
+        @Override
+        public void focusGained(FocusEvent e) {
+            if (username.getText().equals("Enter Username")) {
+            username.setText("");
+            username.setForeground(Color.white);
+            }
+        }
+
+        @Override
+            public void focusLost(FocusEvent e) {
+                if (username.getText().trim().isEmpty()) {
+                    username.setText("Enter Username");
+                    username.setForeground(Color.white); 
+                }
+            }
+        });
+
+        // Password Field (using JPasswordField)
+        JPasswordField password = new JPasswordField();
+        password.setBounds(1000, 500, 200, 30);
+        password.setOpaque(false);
+        password.setBackground(new Color(0, 0, 0, 150));
+        password.setEchoChar((char) 0); 
+        password.setText("Enter Password");
+        password.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, Color.white));
+        password.setForeground(Color.white);
+        this.add(password);
+        password.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                if (String.valueOf(password.getPassword()).equals("Enter Password")) {
+                    password.setText("");
+                    password.setEchoChar('*'); 
+                    password.setForeground(Color.white);
+                }
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                if (String.valueOf(password.getPassword()).trim().isEmpty()) {
+                    password.setText("Enter Password");
+                    password.setEchoChar((char) 0); 
+                    password.setForeground(Color.white); 
+                }
+            }
+        });
+
 
         //added to homepage
         glassPanel.setOpaque(false);
