@@ -1,10 +1,10 @@
-public class Logic {
+public class Logic extends UIHandler {
+    private UIHandler uiHandler;
 
-    private static final String USERNAME = "admin123";
-    private static final String PASSWORD = "admin123";
-
-    public void verifyLogin() {
-
+    public Logic(UIHandler uiHandler) {
+        this.uiHandler = uiHandler;
     }
 
+
+   
 }

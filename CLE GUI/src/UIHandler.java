@@ -7,7 +7,7 @@ import java.awt.image.Kernel;
 import javax.swing.*;
 
 public class UIHandler extends JFrame implements ActionListener, MouseListener {
-    Logic logic = new Logic();
+    private Logic logic;
     Dimension screensize = Toolkit.getDefaultToolkit().getScreenSize();
     ImageIcon homepageBg = new ImageIcon("CLE GUI\\HomepageBg.png");
     ImageIcon sctxt = new ImageIcon("CLE GUI\\sugarcaneFarmTxt.png");
@@ -26,6 +26,7 @@ public class UIHandler extends JFrame implements ActionListener, MouseListener {
     JLabel faq = new JLabel();
     JLabel sysLogoLabel = new JLabel();
     JLabel lglabel = new JLabel();
+    JLabel invalidMessage = new JLabel();
     JTextField username = new JTextField();
     JPasswordField password = new JPasswordField();
 
@@ -54,7 +55,20 @@ public class UIHandler extends JFrame implements ActionListener, MouseListener {
         loginButtonLabel.setFont(new Font("Calibri", Font.PLAIN, 15));
         loginButtonLabel.setForeground(Color.black);
         loginButtonLabel.setHorizontalTextPosition(JLabel.CENTER);
-        loginButtonLabel.addMouseListener(this);
+        loginButtonLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                String enteredUsername = username.getText().trim();
+                String enteredPassword = String.valueOf(password.getPassword()).trim();
+    
+                if (enteredUsername.equals("admin123") && enteredPassword.equals("admin123")) {
+                } else {
+                    lglabel.setVisible(false);
+                    invalidMessage.setVisible(true);
+                }
+            }
+        });
+        
         this.add(loginButtonLabel);
 
         //Description
@@ -90,13 +104,13 @@ public class UIHandler extends JFrame implements ActionListener, MouseListener {
         faq.addMouseListener(this);
         this.add(faq);
 
-        lglabel.setText("Please Login To your Account.");
-        lglabel.setFont(new Font("Calibri", Font.PLAIN, 15));
-        lglabel.setBounds(1000, 280, 350, 50);
-        lglabel.setForeground(Color.white);
-        lglabel.setHorizontalTextPosition(JLabel.CENTER);
-        this.addMouseListener(this);
-        this.add(lglabel);
+        loginPrompt();
+        invalidMessage.setText("Invalid username or password. Please enter again.");
+        invalidMessage.setFont(new Font("Calibri", Font.PLAIN, 15));
+        invalidMessage.setForeground(Color.white);
+        invalidMessage.setBounds(940, 280, 350, 50);
+        invalidMessage.setVisible(false);
+        this.add(invalidMessage);
 
         //username and password
         username.setBounds(1000, 400, 200, 30);
@@ -106,7 +120,7 @@ public class UIHandler extends JFrame implements ActionListener, MouseListener {
         username.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, Color.white));
         username.setForeground(Color.white);
         this.add(username);
-        // Username Field
+    
         username.addFocusListener(new FocusListener() {
         @Override
         public void focusGained(FocusEvent e) {
@@ -125,32 +139,51 @@ public class UIHandler extends JFrame implements ActionListener, MouseListener {
             }
         });
 
-        // Password Field (using JPasswordField)
+        
+
         JPasswordField password = new JPasswordField();
         password.setBounds(1000, 500, 200, 30);
         password.setOpaque(false);
         password.setBackground(new Color(0, 0, 0, 150));
-        password.setEchoChar((char) 0); 
-        password.setText("Enter Password");
+        password.setEchoChar('*');  
         password.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, Color.white));
         password.setForeground(Color.white);
         this.add(password);
+
         password.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
+            
                 if (String.valueOf(password.getPassword()).equals("Enter Password")) {
-                    password.setText("");
-                    password.setEchoChar('*'); 
-                    password.setForeground(Color.white);
+                    password.setText(""); 
+                    password.setEchoChar('*');  
+                    password.setEditable(true);  
                 }
             }
 
             @Override
             public void focusLost(FocusEvent e) {
+               
                 if (String.valueOf(password.getPassword()).trim().isEmpty()) {
-                    password.setText("Enter Password");
+                    password.setText("Enter Password");  
                     password.setEchoChar((char) 0); 
-                    password.setForeground(Color.white); 
+                }
+            }
+        });
+
+    
+        loginButtonLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                // Get the username and password entered
+                String enteredUsername = username.getText();
+                String enteredPassword = new String(password.getPassword());  
+
+                if (enteredUsername.equals("admin123") && enteredPassword.equals("admin123")) {
+    
+                } else {
+                    lglabel.setVisible(false); 
+                    invalidMessage.setVisible(true); 
                 }
             }
         });
@@ -160,9 +193,6 @@ public class UIHandler extends JFrame implements ActionListener, MouseListener {
         glassPanel.setOpaque(false);
         glassPanel.setBounds(850, 200, 500, 500);
         this.add(glassPanel);
-        
-        
-        
         
         homepagePanel.setOpaque(false);
         homepagePanel.setBounds(0, 0, (int)(screensize.width * 0.85), screensize.height);        
@@ -177,6 +207,19 @@ public class UIHandler extends JFrame implements ActionListener, MouseListener {
         this.setVisible(true);
     }
 
+
+
+
+   // =============================== METHODS ======================================================================
+
+    public void loginPrompt() {
+        lglabel.setText("Please Login To your Account.");
+        lglabel.setFont(new Font("Calibri", Font.PLAIN, 15));
+        lglabel.setBounds(1000, 280, 350, 50);
+        lglabel.setForeground(Color.white);
+        lglabel.setHorizontalTextPosition(JLabel.CENTER);
+        this.add(lglabel);
+    }
 
     public void setHomepageBg() {
         image = homepageBg.getImage();
@@ -238,6 +281,7 @@ public class UIHandler extends JFrame implements ActionListener, MouseListener {
         loginButtonLabel.setBounds(1025, 590, width, height);
 
     }
+    
 
     JPanel homepagePanel = new JPanel() {
         @Override
@@ -393,6 +437,11 @@ public class UIHandler extends JFrame implements ActionListener, MouseListener {
     }
 
 
+    public void setLogic(Logic logic) {
+        this.logic = logic;
+    }
+
+
     @Override
     public void actionPerformed(ActionEvent e) {
     
@@ -400,9 +449,7 @@ public class UIHandler extends JFrame implements ActionListener, MouseListener {
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        if(e.getSource()==loginButtonLabel) {
-            logic.getCredentials();
-        }
+       
     }
 
     @Override
