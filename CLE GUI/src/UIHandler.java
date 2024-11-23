@@ -7,6 +7,7 @@ import java.awt.image.Kernel;
 import javax.swing.*;
 
 public class UIHandler extends JFrame implements ActionListener, MouseListener {
+    Logic logic = new Logic();
     Dimension screensize = Toolkit.getDefaultToolkit().getScreenSize();
     ImageIcon homepageBg = new ImageIcon("CLE GUI\\HomepageBg.png");
     ImageIcon sctxt = new ImageIcon("CLE GUI\\sugarcaneFarmTxt.png");
@@ -244,28 +245,28 @@ public class UIHandler extends JFrame implements ActionListener, MouseListener {
             super.paintComponent(g);
             Graphics2D g2d = (Graphics2D) g;
 
-            //for smooth edges
+            
             g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 
-            //Rectangle's position and size
+           
             int x = 0;
             int y = 0;
             int width = (int) (screensize.width * 0.85);
             int height = screensize.height;
 
-            //Gradient Color with transparency
+            
             Color startColor = new Color(0, 0, 0, 255);
             Color endColor = new Color(0, 0, 0, 0);
 
             GradientPaint gradient = new GradientPaint(
-                x,y, startColor, //Start point (left)
-                x+width, y, endColor //End point (right)
+                x,y, startColor, 
+                x+width, y, endColor 
             );
 
-            //Apply the gradient paint
+          
             g2d.setPaint(gradient);
-            //Fill the rectangle with the gradient
+            
             g2d.fillRect(x, y, width, height);
         }
     };
@@ -302,25 +303,25 @@ public class UIHandler extends JFrame implements ActionListener, MouseListener {
             Graphics2D g2d = (Graphics2D) g.create();
             g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
     
-            int x = 10;  // Margin for the rounded rectangle
+            int x = 10;  
             int y = 10;
             int width = getWidth() - 20;
             int height = getHeight() - 20;
-            int arc = 30; // Rounded corner arc
+            int arc = 30; 
     
-            // Create the blurred background
+           
             BufferedImage blurredBackground = createBlurredBackground(getWidth(), getHeight(), 15);
     
-            // Mask the blurred background to fit the rounded rectangle
+       
             BufferedImage maskedBackground = applyMask(blurredBackground, x, y, width, height, arc);
             g2d.drawImage(maskedBackground, 0, 0, null);
     
-            // Draw the glass effect overlay
+      
             Color glassColor = new Color(255, 255, 255, 80); // Semi-transparent white
             g2d.setColor(glassColor);
             g2d.fillRoundRect(x, y, width, height, arc, arc);
     
-            // Draw the border
+      
             Color borderColor = new Color(255, 255, 255, 150);
             g2d.setColor(borderColor);
             g2d.setStroke(new BasicStroke(2));
@@ -334,19 +335,19 @@ public class UIHandler extends JFrame implements ActionListener, MouseListener {
         BufferedImage masked = new BufferedImage(source.getWidth(), source.getHeight(), BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2d = masked.createGraphics();
     
-        // Enable anti-aliasing for smooth edges
+        
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
     
-        // Fill the entire image with transparency
+    
         g2d.setComposite(AlphaComposite.Clear);
         g2d.fillRect(0, 0, masked.getWidth(), masked.getHeight());
     
-        // Set to normal composite for drawing the rounded rectangle mask
+    
         g2d.setComposite(AlphaComposite.Src);
         g2d.setColor(Color.WHITE);
         g2d.fill(new RoundRectangle2D.Float(x, y, width, height, arc, arc));
     
-        // Apply the mask to the source image
+
         g2d.setComposite(AlphaComposite.SrcIn);
         g2d.drawImage(source, 0, 0, null);
     
@@ -399,7 +400,9 @@ public class UIHandler extends JFrame implements ActionListener, MouseListener {
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        if(e.getSource()==loginButtonLabel) {}
+        if(e.getSource()==loginButtonLabel) {
+            logic.getCredentials();
+        }
     }
 
     @Override
