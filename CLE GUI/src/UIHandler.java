@@ -7,7 +7,7 @@ import java.awt.image.Kernel;
 import javax.swing.*;
 
 public class UIHandler extends JFrame implements ActionListener, MouseListener {
-    private Logic logic;
+    
     Dimension screensize = Toolkit.getDefaultToolkit().getScreenSize();
     ImageIcon homepageBg = new ImageIcon("CLE GUI\\HomepageBg.png");
     ImageIcon sctxt = new ImageIcon("CLE GUI\\sugarcaneFarmTxt.png");
@@ -55,21 +55,7 @@ public class UIHandler extends JFrame implements ActionListener, MouseListener {
         loginButtonLabel.setFont(new Font("Calibri", Font.PLAIN, 15));
         loginButtonLabel.setForeground(Color.black);
         loginButtonLabel.setHorizontalTextPosition(JLabel.CENTER);
-        loginButtonLabel.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                String enteredUsername = username.getText().trim();
-                String enteredPassword = String.valueOf(password.getPassword()).trim();
-    
-                if (enteredUsername.equals("admin123") && enteredPassword.equals("admin123")) {
-                } else {
-                    lglabel.setVisible(false);
-                    invalidMessage.setVisible(true);
-                }
-            }
-        });
         
-        this.add(loginButtonLabel);
 
         //Description
         homeDesc.setBounds(110, 230, 570, 500);
@@ -141,11 +127,13 @@ public class UIHandler extends JFrame implements ActionListener, MouseListener {
 
         
 
+      
         JPasswordField password = new JPasswordField();
         password.setBounds(1000, 500, 200, 30);
         password.setOpaque(false);
         password.setBackground(new Color(0, 0, 0, 150));
-        password.setEchoChar('*');  
+        password.setEchoChar((char)0);
+        password.setText("Enter Password");
         password.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, Color.white));
         password.setForeground(Color.white);
         this.add(password);
@@ -153,40 +141,42 @@ public class UIHandler extends JFrame implements ActionListener, MouseListener {
         password.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
-            
                 if (String.valueOf(password.getPassword()).equals("Enter Password")) {
-                    password.setText(""); 
-                    password.setEchoChar('*');  
-                    password.setEditable(true);  
+                    password.setText("");
+                    password.setEchoChar('*'); 
                 }
             }
 
             @Override
             public void focusLost(FocusEvent e) {
-               
                 if (String.valueOf(password.getPassword()).trim().isEmpty()) {
-                    password.setText("Enter Password");  
+                    password.setText("Enter Password");
                     password.setEchoChar((char) 0); 
                 }
             }
         });
 
-    
+
         loginButtonLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                // Get the username and password entered
-                String enteredUsername = username.getText();
-                String enteredPassword = new String(password.getPassword());  
+                // Get the username and password inputs
+                String enteredUsername = username.getText().trim();
+                char[] enteredPasswordArray = password.getPassword();  
+                String enteredPassword = String.valueOf(enteredPasswordArray).trim(); 
 
+                
                 if (enteredUsername.equals("admin123") && enteredPassword.equals("admin123")) {
-    
+                    dispose(); 
+                    new Menu(); 
                 } else {
                     lglabel.setVisible(false); 
                     invalidMessage.setVisible(true); 
                 }
             }
         });
+
+        this.add(loginButtonLabel);
 
 
         //added to homepage
@@ -437,9 +427,7 @@ public class UIHandler extends JFrame implements ActionListener, MouseListener {
     }
 
 
-    public void setLogic(Logic logic) {
-        this.logic = logic;
-    }
+
 
 
     @Override
